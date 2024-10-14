@@ -1,0 +1,15 @@
+[project]
+name = "sic"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django<3.3",
+    "linkify-it-py<2",
+    "markdown-it-py[linkify]<2",
+    "matplotlib<3.4",
+    "pdfminer-six==20200726",
+    "pygraphviz<=1.8",
+    "wand<0.7",
+]
