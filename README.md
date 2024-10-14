@@ -80,6 +80,9 @@ uv run manage.py runserver 8001 # or run at 127.0.0.1:8001
 uv run manage.py runserver 0.0.0.0:8000 # or run at public-ip:8000
 ```
 
+NOTE: If you do not validate your email, then you cannot do much.
+In debug mode, Django prints emails to the console.
+
 See [`DEPLOY.md`](DEPLOY.md) for deployment instructions.
 
 ## Code style
