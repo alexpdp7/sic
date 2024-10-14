@@ -80,6 +80,13 @@ uv run manage.py runserver 8001 # or run at 127.0.0.1:8001
 uv run manage.py runserver 0.0.0.0:8000 # or run at public-ip:8000
 ```
 
+With a container:
+
+```shell
+podman build . -t sic
+podman run -it --rm --network host -v $(pwd)/sic.db:/app/sic.db localhost/sic:latest /app/manage.py runserver
+```
+
 NOTE: If you do not validate your email, then you cannot do much.
 In debug mode, Django prints emails to the console.
 
