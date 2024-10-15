@@ -9,19 +9,30 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
-from .local.secret_settings import *
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DEVELOPMENT = bool(os.environ.get("DEV"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEVELOPMENT
+
+if DEVELOPMENT:
+    # In debug mode, we just generate a random key when we run runserver.
+    # This means sessions will expire when we restart, but this simplifies things a bit.
+    from django.core.management.utils import get_random_secret_key
+    SECRET_KEY = get_random_secret_key()
+else:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+
 
 ALLOWED_HOSTS = []
 
@@ -82,18 +93,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sic.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+if DEVELOPMENT:
+    sqlite = BASE_DIR / "sic.db"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "sic.db",
-        "CONN_MAX_AGE": None,
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{sqlite}" if DEVELOPMENT else None,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
-
 
 AUTH_USER_MODEL = "sic.User"
 
@@ -139,18 +148,10 @@ STATIC_URL = "/static/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-if DEBUG:
+if DEVELOPMENT:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_HOST = "localhost"
 # EMAIL_PORT = 25
-
-
-# Allow local settings overrides
-
-try:
-    from .local.settings_local import *
-except ImportError:
-    pass
 
 CSRF_TRUSTED_ORIGINS = ["https://*.sic.pm", "https://sic.pm"]

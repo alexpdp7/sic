@@ -70,9 +70,7 @@ Public instance at https://sic.pm | [Tor hidden service](http://sicpm3hp7dtrwhmf
 ## Setup / Deployment
 
 ```shell
-cp sic/local/secret_settings.py{.template,}
-vim sic/local/secret_settings.py # REQUIRED: add secret token
-vim sic/local/settings_local.py # OPTIONAL: local settings (SMTP etc)
+export DEV=y
 uv run manage.py migrate #sets up database
 uv run manage.py createsuperuser #selfexplanatory
 uv run manage.py runserver # run at 127.0.0.1:8000
