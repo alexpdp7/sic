@@ -98,7 +98,7 @@ if DEVELOPMENT:
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{sqlite}" if DEVELOPMENT else None,
+        default=f"sqlite:///{sqlite}" if not os.environ.get("DATABASE_URL") and DEVELOPMENT else None,
         conn_max_age=600,
         conn_health_checks=True,
     )
